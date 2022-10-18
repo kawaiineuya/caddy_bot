@@ -1,0 +1,18 @@
+<launch>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="base_to_camera_link" args="0 0 0 0 0 0 base_footprint camera_link"/>
+    <include file="$(find turtlebot3_bringup)/launch/turtlebot3_robot.launch"/>
+    <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+        <arg name="align_depth" value="true"/>
+        <arg name="depth_width" value="424"/>
+        <arg name="depth_height" value="240"/>
+        <arg name="depth_fps" value="15"/>
+        <arg name="color_width" value="424"/>
+        <arg name="color_height" value="240"/>
+        <arg name="color_fps" value="15"/>
+    </include>
+    <include file="$(find depthimage_to_laserscan)/launch/launchfile_sample.launch"/>
+    <!-- <include file="$(find caddy_rtabmap)/launch/slam_gmapping_pr2.launch"/> -->
+    <!-- <include file="$(find caddy_location)/launch/amcl.launch" /> -->
+    <!-- <include file="$(find caddy_rtabmap)/launch/handheld_mapping.launch"/>  -->
+    <!-- <include file="$(find caddy_location)/launch/move_base.launch" /> -->
+</launch>

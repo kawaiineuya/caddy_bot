@@ -1,0 +1,15 @@
+# Place all wstool packages here, so that we don't accidentally put them in git.
+
+usb_cam/
+zed_ros_wrapper/
+i2c_imu/
+ROSIMU/
+robot_localization/
+warehouse_ros/
+warehouse_ros_mongo/
+rover_moveit_config/default_warehouse_mongo_db/
+
+# Other system-dependant things
+
+.rosinsta*
+CMakeLists

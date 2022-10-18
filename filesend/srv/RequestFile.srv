@@ -1,0 +1,8 @@
+string local_file
+string folder
+---
+uint8 status
+
+uint8 STATUS_SENDING=0
+uint8 STATUS_COULDNT_OPEN=1
+uint8 STATUS_BUSY=2

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+
+  <include file="$(find ublox_gps)/launch/ublox_device.launch"/>
+  <node pkg="caddy_bot" type="gps_copy.py" name="gps_copy" clear_params="true"/>
+
+
+</launch>
+ 

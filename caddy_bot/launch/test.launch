@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<launch>
+  <node pkg="custom_msg_pkg" type="dd.py" name="dd" clear_params="true"/>
+</launch>
