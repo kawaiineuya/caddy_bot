@@ -21,6 +21,7 @@ class ObjectDrawer
     tf::TransformBroadcaster tf_publisher_;
     image_geometry::PinholeCameraModel cam_model_;
     darknet_ros_msgs::BoundingBoxes boxes;
+    darknet_ros_msgs::BoundingBoxes boxes_clear;
     rs2_intrinsics intrinsic_;
 public:
     ObjectDrawer()
@@ -62,31 +63,34 @@ public:
             {
                 int center_x, center_y;
                 std::string obj_name = boxes.bounding_boxes[i].Class;
-                int obj_id = boxes.bounding_boxes[i].id;
-                center_x = (boxes.bounding_boxes[i].xmax + boxes.bounding_boxes[i].xmin) / 2;
-                center_y = (boxes.bounding_boxes[i].ymax + boxes.bounding_boxes[i].ymin) / 2;
+                if (obj_name + std::to_string(i) == "person0"){
+                    int obj_id = boxes.bounding_boxes[i].id;
+                    center_x = (boxes.bounding_boxes[i].xmax + boxes.bounding_boxes[i].xmin) / 2;
+                    center_y = (boxes.bounding_boxes[i].ymax + boxes.bounding_boxes[i].ymin) / 2;
+                    
+                    int depth_in_mm = image.at<short int>(cv::Point(center_x, center_y));
+                    
+                    float pixel[] = {(float)center_x, (float)center_y};
+                    float point[3];
+                    float depth_in_m = image.at<short int>(cv::Point(center_x, center_y));
+                    rs2_deproject_pixel_to_point(&point[0], &intrinsic_, &pixel[0], depth_in_m / 1000);
+                    cv::Point3d obj_xyz(point[2], -point[0], -point[1]);
+                    ros::Time current_time = ros::Time::now();
                 
-                int depth_in_mm = image.at<short int>(cv::Point(center_x, center_y));
-                
-                float pixel[] = {(float)center_x, (float)center_y};
-                float point[3];
-                float depth_in_m = image.at<short int>(cv::Point(center_x, center_y));
-                rs2_deproject_pixel_to_point(&point[0], &intrinsic_, &pixel[0], depth_in_m / 1000);
-                cv::Point3d obj_xyz(point[2], -point[0], -point[1]);
-                ros::Time current_time = ros::Time::now();
-            
-                geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(0);
-                
-                geometry_msgs::TransformStamped odom_trans;
-                odom_trans.header.stamp = current_time;
-                odom_trans.header.frame_id = "camera_link";
-                odom_trans.child_frame_id = obj_name + std::to_string(i);
-                odom_trans.transform.translation.x = obj_xyz.x;
-                odom_trans.transform.translation.y = obj_xyz.y;
-                odom_trans.transform.translation.z = obj_xyz.z;
-                odom_trans.transform.rotation = odom_quat;
-                // ROS_INFO("%s published in %f, %f, %f\n", obj_name.c_str(), obj_xyz.x, obj_xyz.y, obj_xyz.z);
-                tf_publisher_.sendTransform(odom_trans);
+                    geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(0);
+                    
+                    geometry_msgs::TransformStamped odom_trans;
+                    odom_trans.header.stamp = current_time;
+                    odom_trans.header.frame_id = "camera_link";
+                    odom_trans.child_frame_id = obj_name + std::to_string(i);
+                    odom_trans.transform.translation.x = obj_xyz.x;
+                    odom_trans.transform.translation.y = obj_xyz.y;
+                    odom_trans.transform.translation.z = obj_xyz.z;
+                    odom_trans.transform.rotation = odom_quat;
+                    // ROS_INFO("%s published in %f, %f, %f\n", obj_name.c_str(), obj_xyz.x, obj_xyz.y, obj_xyz.z);
+                    tf_publisher_.sendTransform(odom_trans);
+                    boxes = boxes_clear;
+                }   
             }
         }
     }

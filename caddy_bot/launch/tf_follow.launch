@@ -31,7 +31,7 @@
 
     <include file="$(find caddy_bot)/launch/tf_follow_move_base.launch"/>
 
-    <!-- <node ns="/caddy_bot" pkg="caddy_bot" type="follow" name="follow" output="screen"/> -->
+    <node ns="/caddy_bot" pkg="caddy_bot" type="follow" name="follow" output="screen"/>
 
 </launch>
  

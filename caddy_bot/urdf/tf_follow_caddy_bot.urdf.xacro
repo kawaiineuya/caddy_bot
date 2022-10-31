@@ -48,4 +48,11 @@
   </joint>
   <link name="camera_link"/>
 
+  <joint name="uwb_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="uwb_link"/>
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+  </joint>
+  <link name="uwb_link"/>
+
 </robot>

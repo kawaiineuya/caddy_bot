@@ -27,11 +27,14 @@ add_executable(gps_waypoint src/gps_waypoint.cpp)
 add_executable(gps_follow src/gps_follow.cpp)
 add_executable(gps_utm src/gps_utm.cpp)
 add_executable(follow src/follow.cpp)
+add_executable(uwb_follow src/uwb_follow.cpp)
+
 
 target_link_libraries(gps_waypoint ${catkin_LIBRARIES})
 target_link_libraries(gps_follow ${catkin_LIBRARIES})
 target_link_libraries(gps_utm ${catkin_LIBRARIES})
 target_link_libraries(follow ${catkin_LIBRARIES})
+target_link_libraries(uwb_follow ${catkin_LIBRARIES})
 
 install(DIRECTORY  launch
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}

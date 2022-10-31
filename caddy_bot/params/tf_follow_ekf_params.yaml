@@ -1,6 +1,6 @@
 ekf_se_odom:
   use_sim_time: true
-  frequency: 10
+  frequency: 20
   sensor_timeout: 0.1
   two_d_mode: true
   transform_time_offset: 0.0
