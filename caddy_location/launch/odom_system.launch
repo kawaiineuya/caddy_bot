@@ -1,0 +1,6 @@
+<launch>
+    <include file="$(find caddy_location)/launch/navsat_transform_node.launch"/>
+    <include file="$(find caddy_location)/launch/global_ekf.launch" />
+    <include file="$(find caddy_location)/launch/local_ekf.launch" />
+
+</launch>
