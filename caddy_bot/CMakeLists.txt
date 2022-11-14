@@ -26,11 +26,13 @@ include_directories(
 add_executable(uwb_tf src/uwb_tf.cpp)
 add_executable(uwb_follow src/uwb_follow.cpp)
 add_executable(camera_follow src/camera_follow.cpp)
+add_executable(gps_waypoint src/gps_waypoint.cpp)
 add_executable(gps_follow src/gps_follow.cpp)
 
 target_link_libraries(uwb_tf ${catkin_LIBRARIES})
 target_link_libraries(uwb_follow ${catkin_LIBRARIES})
 target_link_libraries(camera_follow ${catkin_LIBRARIES})
+target_link_libraries(gps_waypoint ${catkin_LIBRARIES})
 target_link_libraries(gps_follow ${catkin_LIBRARIES})
 
 install(DIRECTORY  launch

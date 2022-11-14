@@ -10,7 +10,9 @@
 
     <!-- gps -->
     <node pkg="oroca_ros_tutorials" type="ros_tutorial_msg_publisher" name="ros_tutorial_msg_publisher" clear_params="true"/>
- 
+    <node ns="/caddy_bot" pkg="caddy_bot" type="gps_waypoint" name="gps_waypoint" output="screen"/>
+	    <param name="/caddy_bot/coordinates_file" value="/waypoint_files/points.txt" type="string" />
+
     <!-- camera -->
     <include file="$(find realsense2_camera)/launch/rs_rgbd.launch">
         <arg name="align_depth" value="true"/>
