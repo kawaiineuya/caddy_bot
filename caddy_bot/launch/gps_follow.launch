@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- tf -->
+    <arg name="urdf_file" default="$(find xacro)/xacro '$(find caddy_bot)/urdf/gps_waypoint_caddy_bot.urdf.xacro'" />
+    <param name="robot_description" command="$(arg urdf_file)" />
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+        <param name="publish_frequency" type="double" value="50.0" />
+        <param name="tf_prefix" value=""/>
+    </node>
+
+    <!-- gps -->
+    <node pkg="oroca_ros_tutorials" type="ros_tutorial_msg_publisher" name="ros_tutorial_msg_publisher" clear_params="true"/>
+    <node ns="/caddy_bot" pkg="caddy_bot" type="gps_follow" name="gps_follow" output="screen"/>
+
+    <!-- camera -->
+    <include file="$(find realsense2_camera)/launch/rs_rgbd.launch">
+        <arg name="align_depth" value="true"/>
+        <arg name="depth_width" value="424"/>
+        <arg name="depth_height" value="240"/>
+        <arg name="depth_fps" value="30"/>
+        <arg name="color_width" value="424"/>
+        <arg name="color_height" value="240"/>
+        <arg name="color_fps" value="30"/>
+    </include>
+    <include file="$(find darknet_ros)/launch/darknet_ros.launch"/>
+    <include file="$(find yolo_odom)/launch/odom.launch"/>
+    <node pkg="caddy_bot" type="camera_follow" name="camera_follow" clear_params="true"/>
+
+    <!-- motor -->
+    <node pkg="caddy_bot" type="motor.py" name="motor" clear_params="true"/>
+
+    <!-- imu -->
+    <include file="$(find e2box_imu)/launch/e2box_imu.launch"/>
+
+    <!-- ekf -->
+    <rosparam command="load" file="$(find caddy_bot)/params/gps_waypoint_ekf_params.yaml" />
+    <rosparam command="load" file="$(find caddy_bot)/params/gps_waypoint_navsat_params.yaml" />
+
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_se_odom" clear_params="true"/>
+
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_se_map" clear_params="true">
+        <remap from="odometry/filtered" to="odometry/filtered_map"/>
+    </node>
+
+    <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform" clear_params="true" output="screen" >
+        <remap from="odometry/filtered" to="odometry/filtered_map"/>
+        <remap from="gps/fix" to="vc_gps_caddy"/>
+        <remap from="imu/data" to="imu_e2box"/>
+    </node>
+
+    <!-- move_base -->
+    <arg name="cmd_vel_topic" default="/cmd_vel" />
+    <arg name="odom_topic" default="/odometry/filtered_map"/>
+    <arg name="move_forward_only" default="false"/>
+    
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+        <rosparam file="$(find caddy_bot)/params/gps_waypoint_costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find caddy_bot)/params/gps_waypoint_costmap_common_params.yaml" command="load" ns="local_costmap" />
+        
+        <rosparam file="$(find caddy_bot)/params/gps_waypoint_global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find caddy_bot)/params/gps_waypoint_local_costmap_params.yaml" command="load" />
+
+        <rosparam file="$(find caddy_bot)/params/gps_waypoint_base_local_planner_params.yaml" command="load" />
+
+        <rosparam file="$(find caddy_bot)/params/gps_waypoint_move_base_params.yaml" command="load" />
+        
+        <param name="base_global_planner" type="string" value="navfn/NavfnROS" />
+        <param name="base_local_planner" value="base_local_planner/TrajectoryPlannerROS"/>
+        
+        <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
+        <remap from="odom" to="$(arg odom_topic)"/>
+    </node>
+
+</launch>

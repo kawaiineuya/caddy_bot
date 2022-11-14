@@ -12,10 +12,11 @@
     <node pkg="rosserial_python" type="serial_node_main.py" name="serial_node_main" args="tcp"/>
     <node pkg="rosserial_python" type="serial_node_b.py" name="serial_node_b" args="tcp"/>
     <node pkg="rosserial_python" type="serial_node_c.py" name="serial_node_c" args="tcp"/>
+    <node pkg="caddy_bot" type="uwb_tf" name="uwb_tf" clear_params="true"/>
     <node pkg="caddy_bot" type="uwb_follow" name="uwb_follow" clear_params="true"/>
-
+    
     <!-- motor -->
-    <!-- <node pkg="caddy_bot" type="motor.py" name="motor" clear_params="true"/> -->
+    <node pkg="caddy_bot" type="motor.py" name="motor" clear_params="true"/>
     
     <!-- imu -->
     <include file="$(find e2box_imu)/launch/e2box_imu.launch"/>
@@ -46,6 +47,4 @@
         <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
         <remap from="odom" to="$(arg odom_topic)"/>
     </node>
-
-    <node pkg="caddy_bot" type="follow" name="follow" clear_params="true"/>
 </launch>

@@ -23,11 +23,15 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
+add_executable(uwb_tf src/uwb_tf.cpp)
 add_executable(uwb_follow src/uwb_follow.cpp)
-add_executable(follow src/follow.cpp)
+add_executable(camera_follow src/camera_follow.cpp)
+add_executable(gps_follow src/gps_follow.cpp)
 
+target_link_libraries(uwb_tf ${catkin_LIBRARIES})
 target_link_libraries(uwb_follow ${catkin_LIBRARIES})
-target_link_libraries(follow ${catkin_LIBRARIES})
+target_link_libraries(camera_follow ${catkin_LIBRARIES})
+target_link_libraries(gps_follow ${catkin_LIBRARIES})
 
 install(DIRECTORY  launch
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}

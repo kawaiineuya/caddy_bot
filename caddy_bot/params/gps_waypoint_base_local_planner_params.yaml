@@ -1,0 +1,73 @@
+TrajectoryPlannerROS:
+
+# Robot Configuration Parameters
+  # 2022 0901
+  max_vel_x: 0.5
+  min_vel_x: 0.1
+
+
+# The velocity when robot is moving in a straight line
+
+
+  # 2022 0901
+  max_vel_theta: 1.57
+  min_vel_theta: -1.57
+
+  min_in_place_vel_theta: 0.18 #0.314
+
+
+# 2022 0901
+  acc_lim_x: 10.0
+  acc_lim_theta:  20.0
+
+
+# Goal Tolerance Parameters
+
+  xy_goal_tolerance: 0.5
+  yaw_goal_tolerance: 0.3
+  latch_xy_goal_tolerance: false
+  
+# Forward Simulation Parameters
+  sim_time: 2.0
+  sim_granularity: 0.025 
+
+  # 2022 0901
+  angular_sim_granularity: 0.02
+
+  vx_samples: 6
+  # vy_samples: 0
+  vtheta_samples: 20
+  controller_frequency: 20.0
+
+# Trajectory Scoring Parameters
+
+# 2022 0901
+  path_distance_bias: 0.75
+  goal_distance_bias: 1.0
+  # pdist_scale: 
+  # gdist_scale: 
+
+  meter_scoring: true
+
+  occdist_scale: 0.1    #0.1
+
+
+  heading_lookahead: 0.325
+  heading_scoring: false
+  heading_scoring_timestep: 0.8
+  dwa: true
+  simple_attractor: false
+  publish_cost_grid_pc: true
+
+
+# Oscillation Prevention Parameters
+  oscillation_reset_dist: 0.05
+  escape_reset_dist: 0.1
+  escape_reset_theta: 0.1
+
+
+# custom
+  escape_vel: -0.1
+
+# Differential-drive robot configuration
+  holonomic_robot: false

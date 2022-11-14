@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<launch>
+  <node pkg="yolo_odom" type="odom" name="odom" output="screen"/>
+</launch>

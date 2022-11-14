@@ -95,7 +95,7 @@ void transformPoint(const tf::TransformListener& listener)
     base_point0.point.z = 0.0;
     geometry_msgs::PointStamped base_point1, base_point2;
     geometry_msgs::PointStamped person0_point;
-    person0_point.header.frame_id = "person";
+    person0_point.header.frame_id = "person0";
     person0_point.header.stamp = ros::Time();
     person0_point.point.x = 0.0;
     person0_point.point.y = 0.0;
@@ -104,7 +104,7 @@ void transformPoint(const tf::TransformListener& listener)
 
     try{
         listener.transformPoint("odom", person0_point, base_point1);
-        listener.transformPoint("uwb_link", person0_point, base_point2);
+        listener.transformPoint("camera_link", person0_point, base_point2);
 
         // ROS_INFO("camera_link: (%.2f, %.2f. %.2f) -----> person0: (%.2f, %.2f, %.2f) at time %.2f",
         //     person0_point.point.x, person0_point.point.y, person0_point.point.z,
@@ -112,7 +112,7 @@ void transformPoint(const tf::TransformListener& listener)
         // ROS_INFO("time (%.2f, %.2f)",ros::Time::now().toSec(),base_point2.header.stamp.toSec());
 
         if (ros::Time::now().toSec() - base_point2.header.stamp.toSec() > 0.1){
-            // pub_goal_cancel.publish(goal_cancel);
+            pub_goal_cancel.publish(goal_cancel);
         }else{
             float yaw_gap = GetDegree(person0_point, base_point2);
             bool yaw_gap_flag = false;
@@ -140,7 +140,7 @@ void transformPoint(const tf::TransformListener& listener)
 
 int main(int argc, char** argv)
 {
-    ros::init(argc, argv, "uwb_follow");
+    ros::init(argc, argv, "camera_follow");
     ros::NodeHandle n;
 
     pub_goal = n.advertise<geometry_msgs::PoseStamped>("/move_base_simple/goal", 10);
