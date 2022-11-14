@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-
-<launch>
-
-  <node ns="/caddy_bot" pkg="caddy_bot" type="gps_follow" name="gps_follow" output="screen"/>
-		
-</launch>
-
